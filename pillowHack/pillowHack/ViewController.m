@@ -32,6 +32,11 @@
     __block float yTotal;
     GSHealthKitManager *sleep;
     
+    float totalangle;
+    float anglescounted;
+    
+    int lightticks;
+    
 }
 
 
@@ -47,6 +52,7 @@
 
 int a=1;
 - (IBAction)start:(id)sender {
+    [self camera];
     [self frontCamera];
     [self gyroscope];
     [self timer];
@@ -62,11 +68,22 @@ int a=1;
     start.hidden= NO;
     end.hidden = YES;
     
+    Firebase *myRootRef = [[Firebase alloc] initWithUrl:@"https://pillowhack.firebaseio.com"];
+    // Write data to Firebase
+    NSNumber *disturbances = [NSNumber numberWithInt:occurances];
+    [[myRootRef childByAppendingPath:@"disturbances"] setValue: disturbances];
+    
+    [[myRootRef childByAppendingPath:@"timeslept"] setValue: [NSNumber numberWithInt:count]];
+    
+    [[myRootRef childByAppendingPath:@"averageangle"] setValue: [NSNumber numberWithFloat:totalangle/anglescounted]];
+    
+    [[myRootRef childByAppendingPath:@"timelight"] setValue: [NSNumber numberWithFloat:totalangle/lightticks]];
+    
     
 }
 
 - (IBAction)camera:(id)sender {
-    [self camera];
+//    [self camera];
 }
 
 
@@ -77,10 +94,10 @@ int occurances=0;
 - (void)gyroscope{
     yTotal = 0;
     if(a == 1){
-        [super viewDidLoad];
         UILabel* yLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 50)];
         [self.view addSubview:yLabel];
         yLabel.textAlignment = NSTextAlignmentCenter;
+        yLabel.text = @"trolled";
         
         UILabel* yLabelChange = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)];
         [self.view addSubview:yLabelChange];
@@ -97,18 +114,20 @@ int occurances=0;
                  {
                      float degs = RADIANS_TO_DEGREES(gyroData.rotationRate.y);
                      degs = degs - 0.4;
-                     int x;
-                     for(x=0;x>=0;x++){
-                         yTotal = degs + yTotal;
+                     totalangle += degs;
+                     anglescounted++;
+//                     int x;
+//                     for(x=0;x>=0;x++){
+//                         yTotal = degs + yTotal;
                          if(degs > 50.0 || degs < -50.0){
-//                           NSNumber *x = [NSNumber numberWithInt:3];
                              int x = 1;
                              occurances = x + occurances;
                              NSLog(@"%d",occurances);
                          }
-                     }
-                     float average = yTotal/x;
-                     NSString *y = [[NSString alloc] initWithFormat:@"%.02f",average];
+//                     }
+                     float average = totalangle;
+                     NSString *y = [[NSString alloc] initWithFormat:@"%.02f %f",average,anglescounted];
+//                     NSLog(y);
                      angle = yTotal;
                      yLabel.text = y;
                      yLabelChange.text = [[NSString alloc] initWithFormat:@"%.02f",degs];
@@ -117,10 +136,7 @@ int occurances=0;
             }
         }
 
-        Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://pilloww.firebaseio.com"] childByAppendingPath:@"disturbances" @"headangle"];
-        // Write data to Firebase
-        NSNumber *disturbances = [NSNumber numberWithInt:occurances];
-        [myRootRef setValue: disturbances];
+        
 
     }
     else{
@@ -132,6 +148,9 @@ int occurances=0;
 -(void) tick:(NSTimer*)timer
 {
     if(a==1){
+        
+        [self capture];
+        
     count = count + 1;
     [counter removeFromSuperview];
 
@@ -197,14 +216,6 @@ int occurances=0;
 }
 
 -(void) camera{
-//    navbar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, _width, 66)];
-//    navbar.backgroundColor = [UIColor redColor];
-//
-//
-//    
-//    
-//    [[self view] addSubview:navbar];
-//
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPresetHigh;
     AVCaptureDevice *device = [self frontCamera];
@@ -213,23 +224,20 @@ int occurances=0;
     [session addInput:input];
     AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     newCaptureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 66, _width, self.view.frame.size.height-66);
+    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 0, _width, self.view.frame.size.height);
     //    newCaptureVideoPreviewLayer.la
     [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
     [session startRunning];
     
-//    [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
-//            capturedView.image = image;
-        [self.view addSubview:capturedView];
+    //    capturedView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
+    //    //    capturedView.image = image;
+    //    [self.view addSubview:capturedView];
     
-    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick2:) userInfo:nil repeats:YES];
-    count = 3;
-
-    label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _width, 100)];
-    label.text = @"3";
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:60];
-    [self.view addSubview:label];
+    
+    stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+    NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil];
+    [stillImageOutput setOutputSettings:outputSettings];
+    [session addOutput:stillImageOutput];
 
 
 }
@@ -243,10 +251,7 @@ int occurances=0;
 -(void) capture
 {
     
-
-    [[Firebase alloc] initWithUrl:@"https://pillowhack.firebaseio.com/"];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:0 forKey:@"blinks"];
+    NSLog(@"capture");
     
     AVCaptureConnection *videoConnection = nil;
     for (AVCaptureConnection *connection in stillImageOutput.connections)
@@ -277,18 +282,17 @@ int occurances=0;
          }
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
          UIImage *image = [[UIImage alloc] initWithData:imageData];
-         Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://pillowhack.firebaseio.com/"]childByAppendingPath:@"light"];
+
          
          if(isDarkImage(image))
          {
-             
-             
-             [myRootRef setValue:[NSNumber numberWithBool:true]];
+            NSLog(@"dark");
          }
          else
          {
              
-             [myRootRef setValue:[NSNumber numberWithBool:false]];
+             NSLog(@"light");
+             lightticks++;
          }
          
      }];
