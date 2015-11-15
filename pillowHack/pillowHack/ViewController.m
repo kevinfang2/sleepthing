@@ -117,7 +117,7 @@ int occurances=0;
             }
         }
 
-        Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://hackchair.firebaseio.com"] childByAppendingPath:@"disturbances" @"headangle"];
+        Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://pilloww.firebaseio.com"] childByAppendingPath:@"disturbances" @"headangle"];
         // Write data to Firebase
         NSNumber *disturbances = [NSNumber numberWithInt:occurances];
         [myRootRef setValue: disturbances];
