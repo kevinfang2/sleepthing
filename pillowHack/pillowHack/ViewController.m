@@ -281,10 +281,13 @@ int occurances=0;
          
          if(isDarkImage(image))
          {
+             
+             
              [myRootRef setValue:[NSNumber numberWithBool:true]];
          }
          else
          {
+             
              [myRootRef setValue:[NSNumber numberWithBool:false]];
          }
          

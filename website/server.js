@@ -8,7 +8,7 @@ var app = express();
 app.use(express.static(__dirname + "")); //use static files in ROOT/public folder
 
 app.get("/", function(request, response){ //root dir
-    response.send(home);
+    response.send(home.html);
 });
 
 var io = require('socket.io').listen(app.listen(process.env.PORT || port));
