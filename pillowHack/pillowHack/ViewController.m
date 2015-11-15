@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <CoreMotion/CoreMotion.h>
 #import <AVFoundation/AVFoundation.h>
+#import <healthkit/healthkit.h>
 #define _width self.view.frame.size.width
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
 
@@ -22,23 +23,12 @@
     float angle;
     __block float yTotal;
 }
+
 @end
 
 @implementation ViewController
 
-- (AVCaptureDevice *)frontCamera {
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionFront) {
-            return device;
-        }
-    }
-    return nil;
-}
-
-
-- (void)viewDidLoad {
-//    [myRootRef setValue:0];
+- (IBAction)start:(id)sender {
     yTotal = 0;
     [super viewDidLoad];
     NSLog(@"asdf");
@@ -69,10 +59,42 @@
                  angle = yTotal;
                  yLabel.text = y;
                  yLabelChange.text = [[NSString alloc] initWithFormat:@"%.02f",degs];
-//                 [myRootRef setValue:[NSNumber numberWithFloat:yTotal]];
+                 //                 [myRootRef setValue:[NSNumber numberWithFloat:yTotal]];
              }];
         }
+        //        [self sleeptimer];
     }
+    AVCaptureSession *session = [[AVCaptureSession alloc] init];
+    session.sessionPreset = AVCaptureSessionPresetHigh;
+    AVCaptureDevice *device = [self frontCamera];
+    NSError *error = nil;
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
+    [session addInput:input];
+    AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
+    newCaptureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 0, _width, self.view.frame.size.height);
+    //    newCaptureVideoPreviewLayer.la
+    [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
+    [session startRunning];
+}
+
+
+
+- (AVCaptureDevice *)frontCamera {
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionFront) {
+            return device;
+        }
+    }
+    return nil;
+}
+
+
+- (void)viewDidLoad {
+//    [myRootRef setValue:0];
+    
+
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -80,7 +102,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 
 
