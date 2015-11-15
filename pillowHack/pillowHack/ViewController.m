@@ -31,17 +31,18 @@
     __weak IBOutlet UIButton *start;
     __weak IBOutlet UIButton *end;
 }
-int a;
+
 - (IBAction)start:(id)sender {
     [self gyroscope];
     start.hidden = YES;
     end.hidden = NO;
-    
+
 }
 - (IBAction)end:(id)sender {
     NSLog(@"asdf");
     start.hidden= NO;
     end.hidden = YES;
+    
 }
 
 
@@ -94,6 +95,7 @@ int a;
             }
             //        [self sleeptimer];
         }
+
     }
 }
 
@@ -117,6 +119,10 @@ int a;
             return device;
         }
     }
+    if(isDarkImage){
+        [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+
+    }
     return nil;
 }
 
@@ -131,10 +137,40 @@ int a;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
     // Dispose of any resources that can be recreated.
 }
 
+BOOL isDarkImage(UIImage* inputImage){
+    
+    BOOL isDark = FALSE;
+    
+    CFDataRef imageData = CGDataProviderCopyData(CGImageGetDataProvider(inputImage.CGImage));
+    const UInt8 *pixels = CFDataGetBytePtr(imageData);
+    
+    int darkPixels = 0;
+    
+    int length = CFDataGetLength(imageData);
+    int const darkPixelThreshold = (inputImage.size.width*inputImage.size.height)*.75;
+    
+    for(int i=0; i<length; i+=4)
+    {
+        int r = pixels[i];
+        int g = pixels[i+1];
+        int b = pixels[i+2];
+        
+        //luminance calculation gives more weight to r and b for human eyes
+        float luminance = (0.299*r + 0.587*g + 0.114*b);
+        if (luminance<50) darkPixels ++;
+    }
+    
+    if (darkPixels >= darkPixelThreshold)
+        isDark = YES;
+    
+    CFRelease(imageData);
+    
+    return isDark;
+    
+}
 
 
 @end
