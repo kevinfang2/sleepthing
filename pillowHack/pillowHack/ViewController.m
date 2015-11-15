@@ -98,15 +98,17 @@ int occurances=0;
                      float degs = RADIANS_TO_DEGREES(gyroData.rotationRate.y);
                      degs = degs - 0.4;
                      int x;
-                     for(x=0;x>=0;x++){
+//                     for(x=0;x>=0;x++){
                          yTotal = degs + yTotal;
                          if(degs > 50.0 || degs < -50.0){
+                             yTotal = degs + yTotal;
+
 //                           NSNumber *x = [NSNumber numberWithInt:3];
                              int x = 1;
                              occurances = x + occurances;
                              NSLog(@"%d",occurances);
                          }
-                     }
+//                     }
                      float average = yTotal/x;
                      NSString *y = [[NSString alloc] initWithFormat:@"%.02f",average];
                      angle = yTotal;
