@@ -39,57 +39,57 @@
 }
 
 
+- (AVCaptureDevice *)frontCamera {
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionFront) {
+            return device;
+        }
+    }
+    return nil;
+}
+int a=1;
 - (IBAction)start:(id)sender {
     [self gyroscope];
     [self timer];
-    
-    buttonPressedStartTime = CFAbsoluteTimeGetCurrent();
-
-    NSDate *startNow = [NSDate date];
+    [self frontCamera];
+    a=1;
     start.hidden = YES;
     end.hidden = NO;
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:startNow];
-    NSLog(@"newDateString %@", newDateString);
+
     
 }
 
 
 
 - (IBAction)end:(id)sender {
+    a=2;
     NSLog(@"asdf");
     start.hidden= NO;
     end.hidden = YES;
-
-    NSDate * now = [NSDate date];
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:now];
-    NSLog(@"newDateString %@", newDateString);
 }
-
-- (void)sleep{
-    HKCategoryType *categoryType =
-    [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis];
-    
-    NSDate* now= [NSDate date];
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:now];
-    NSLog(@"newDateString %@", newDateString);
-
-    [HKCategorySample categorySampleWithType:categoryType
-                                       value:HKCategoryValueSleepAnalysisAsleep
-                                   startDate:now
-                                     endDate:now];
-}
+//
+//- (void)sleep{
+//    HKCategoryType *categoryType =
+//    [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis];
+//    
+//    NSDate* now= [NSDate date];
+//    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+//    [outputFormatter setDateFormat:@"HH:mm:ss"];
+//    NSString *newDateString = [outputFormatter stringFromDate:now];
+//    NSLog(@"newDateString %@", newDateString);
+//
+//    [HKCategorySample categorySampleWithType:categoryType
+//                                       value:HKCategoryValueSleepAnalysisAsleep
+//                                   startDate:now
+//                                     endDate:now];
+//}
 
 int occurances=0;
 
 - (void)gyroscope{
     yTotal = 0;
-    if(start.hidden == NO){
+    if(a == 1){
         [super viewDidLoad];
         NSLog(@"asdf");
         UILabel* yLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 50)];
@@ -138,6 +138,7 @@ int occurances=0;
 
 -(void) tick:(NSTimer*)timer
 {
+    if(a==1){
     count = count + 1;
     [counter removeFromSuperview];
 
@@ -145,54 +146,45 @@ int occurances=0;
     counter = [[UILabel alloc] initWithFrame:CGRectMake(30, 350, _width, 30)];
     counter.text = [NSString stringWithFormat:@"%d hours   %d minutes   %d seconds",count/3600,(count/60)%60,count%60];
     [[self view] addSubview:counter];
-
+    }
+    else{
+        
+    }
     
 }
+
 - (void)timer{
-    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
-    UILabel* derp = [[UILabel alloc] initWithFrame:CGRectMake(70, 320, _width, 30)];
-    derp.text = [NSString stringWithFormat:@"You've been sleeping for "];
-
-
-
-//    counter.backgroundColor = [UIColor blueColor];
-    [[self view] addSubview:derp];
-
-}
-
-- (AVCaptureDevice *)frontCamera {
-    AVCaptureSession *session = [[AVCaptureSession alloc] init];
-    session.sessionPreset = AVCaptureSessionPresetHigh;
-    AVCaptureDevice *device = [self frontCamera];
-    NSError *error = nil;
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-    [session addInput:input];
-    AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
-    newCaptureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 0, _width, self.view.frame.size.height);
-    //    newCaptureVideoPreviewLayer.la
-    [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
-    [session startRunning];
-
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionFront) {
-            return device;
-        }
-    }
-    if(isDarkImage){
+    if(a==1){
         [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
-
+        UILabel* derp = [[UILabel alloc] initWithFrame:CGRectMake(70, 320, _width, 30)];
+        derp.text = [NSString stringWithFormat:@"You've been sleeping for "];
+        
+        //    counter.backgroundColor = [UIColor blueColor];
+        [[self view] addSubview:derp];
     }
-    return nil;
+    
 }
+
+
+
+
+
+//    if(&isDarkImage){
+//        [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+//        NSLog(@"asdf");
+//
+//    }
+//    return nil;
+
+
+ 
+
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     //    [myRootRef setValue:0];
-    
-    [self.view addSubview:sleep];
+//    [self.view addSubview:sleep];
 
     
     // Do any additional setup after loading the view, typically from a nib.

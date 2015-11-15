@@ -12,7 +12,7 @@
 
 @interface ViewController : UIViewController
 
-+ (CFTimeInterval *)buttonPressedStartTime;
++ (CFTimeInterval*)buttonPressedStartTime;
 
 @property (strong, nonatomic) IBOutlet UIView *objectView;
 
