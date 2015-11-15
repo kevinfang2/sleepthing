@@ -19,6 +19,7 @@
     UIImageView* capturedView;
     UIButton* capture;
     UILabel* label;
+    UILabel* counter;
     int count;
     float angle;
     __block float yTotal;
@@ -34,6 +35,8 @@
 
 - (IBAction)start:(id)sender {
     [self gyroscope];
+    [self timer];
+
     start.hidden = YES;
     end.hidden = NO;
 
@@ -114,17 +117,26 @@ int occurances=0;
 -(void) tick:(NSTimer*)timer
 {
     count = count + 1;
-    NSLog(@"derpasdf %d",count);
+    [counter removeFromSuperview];
+
+//     NSLog(@"derpasdf %d",count);
+    counter = [[UILabel alloc] initWithFrame:CGRectMake(30, 350, _width, 30)];
+    counter.text = [NSString stringWithFormat:@"%d hours   %d minutes   %d seconds",count/3600,(count/60)%60,count%60];
+    [[self view] addSubview:counter];
+
     
 }
 - (void)timer{
     [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
-    count = 0;
-    NSLog(@"derp %d",count);
-    label = [[UILabel alloc] initWithFrame:CGRectMake(0, 500, _width, 100)];
-    label.text = [NSString stringWithFormat:@"%d",count];
-}
+    UILabel* derp = [[UILabel alloc] initWithFrame:CGRectMake(70, 320, _width, 30)];
+    derp.text = [NSString stringWithFormat:@"You've been sleeping for "];
 
+
+
+//    counter.backgroundColor = [UIColor blueColor];
+    [[self view] addSubview:derp];
+
+}
 
 - (AVCaptureDevice *)frontCamera {
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -156,8 +168,6 @@ int occurances=0;
 
 - (void)viewDidLoad {
     end.hidden = YES;
-    [self timer];
-
 //    [myRootRef setValue:0];
     
 
