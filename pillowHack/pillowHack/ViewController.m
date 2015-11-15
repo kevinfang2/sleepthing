@@ -161,14 +161,15 @@ int occurances=0;
 -(void) tick2:(NSTimer*)timer
 {
     count = count - 1;
-    [counter removeFromSuperview];
-    
-    //     NSLog(@"derpasdf %d",count);
-    counter = [[UILabel alloc] initWithFrame:CGRectMake(30, 350, _width, 30)];
-    counter.text = [NSString stringWithFormat:@"%d",count];
-    [[self view] addSubview:counter];
-}
+    label.text = [NSString stringWithFormat:@"%d",count];
+    if(count == 1)
+    {
+        count = 4;
+//        [self capture];
+        NSLog(@"herp1");
 
+    }
+}
 
 - (AVCaptureDevice *)frontCamera {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -181,16 +182,17 @@ int occurances=0;
 }
 
 -(void) camera{
-    UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
-    //do something like background color, title, etc you self
+    UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(10, 0, 320, 50)];
     [self.view addSubview:navbar];
-    UIBarButtonItem *btnCancel = [[UIBarButtonItem alloc]
-                                  initWithTitle:@"Cancel"
+    navbar.backgroundColor = [UIColor blueColor];
+    NSLog(@"derp");
+    UIBarButtonItem *btnHome = [[UIBarButtonItem alloc]
+                                  initWithTitle:@"Done"
                                   style:UIBarButtonItemStyleBordered
                                   target:self
                                   action:@selector(viewDidLoad)];
-    self.navigationItem.leftBarButtonItem = btnCancel;
-    
+    NSLog(@"herp");
+    self.navigationItem.leftBarButtonItem = btnHome;
     
     
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -206,20 +208,21 @@ int occurances=0;
     [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
     [session startRunning];
     
-    //    capturedView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
-    //    //    capturedView.image = image;
-    //    [self.view addSubview:capturedView];
+//    [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
+//            capturedView.image = image;
+        [self.view addSubview:capturedView];
     
     
-    
-    count = 3;
     [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick2:) userInfo:nil repeats:YES];
+    count = 3;
 
-    label = [[UILabel alloc] initWithFrame:CGRectMake(0, 500, _width, 100)];
+    label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _width, 100)];
     label.text = @"3";
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont boldSystemFontOfSize:60];
     [self.view addSubview:label];
+    
+//    [self isDarkImage];
 
 }
 
