@@ -38,11 +38,11 @@
     end.hidden = NO;
 
 }
+
 - (IBAction)end:(id)sender {
     NSLog(@"asdf");
     start.hidden= NO;
     end.hidden = YES;
-    
 }
 
 
@@ -58,16 +58,18 @@
 //    NSLog(@"Total time was: %lf minutes", [timer timeElapsedInMinutes]);
 //    
 //}
+int occurances=0;
+
 - (void)gyroscope{
+    yTotal = 0;
     if(start.hidden == NO){
-        yTotal = 0;
         [super viewDidLoad];
         NSLog(@"asdf");
-        UILabel* yLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, _width, 50)];
+        UILabel* yLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 50)];
         [self.view addSubview:yLabel];
         yLabel.textAlignment = NSTextAlignmentCenter;
         
-        UILabel* yLabelChange = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, _width, 50)];
+        UILabel* yLabelChange = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)];
         [self.view addSubview:yLabelChange];
         yLabelChange.textAlignment = NSTextAlignmentCenter;
         
@@ -80,11 +82,17 @@
                 [motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue]
                                            withHandler:^(CMGyroData *gyroData, NSError *error)
                  {
-                     float degs = RADIANS_TO_DEGREES(gyroData.rotationRate.y) / 10;
+                     float degs = RADIANS_TO_DEGREES(gyroData.rotationRate.y);
                      degs = degs - 0.4;
-                     if(degs > 0.2 || degs < -0.2)
+                     if(degs > 50.0 || degs < -50.0)
                      {
-                         yTotal = yTotal + degs;
+                         yTotal = degs;
+//                         NSNumber *x = [NSNumber numberWithInt:3];
+                         int x = 1;
+                         occurances = x + occurances;
+                         NSLog(@"%d",occurances);
+                         
+                         
                      }
                      NSString *y = [[NSString alloc] initWithFormat:@"%.02f",yTotal];
                      angle = yTotal;
@@ -97,7 +105,26 @@
         }
 
     }
+    else{
+//        [UILabel removeFromSuperview];
+    }
 }
+
+
+-(void) tick:(NSTimer*)timer
+{
+    count = count + 1;
+    NSLog(@"derpasdf %d",count);
+    
+}
+- (void)timer{
+    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+    count = 0;
+    NSLog(@"derp %d",count);
+    label = [[UILabel alloc] initWithFrame:CGRectMake(0, 500, _width, 100)];
+    label.text = [NSString stringWithFormat:@"%d",count];
+}
+
 
 - (AVCaptureDevice *)frontCamera {
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -129,6 +156,8 @@
 
 - (void)viewDidLoad {
     end.hidden = YES;
+    [self timer];
+
 //    [myRootRef setValue:0];
     
 
