@@ -214,7 +214,41 @@ html, body{
   position: absolute;
   margin-left:10%;
 }
+.b{
+  position:absolute;
+  margin-top:-50%;
+  text-align: center;
+  width: 100%;
+  height:300px;
+  background-color:#000000;
+  border-style:solid;
+  border-color:#FFFFFF;
+}
 
+.c{
+position:absolute;
+  margin-top:33%;
+  text-align: center;
+  width: 100%;
+  height:265px;
+  background-color:#000000;
+  border-style:solid;
+  border-color:#FFFFFF;
+}
+
+.d{
+
+position:absolute;
+  margin-top:130%;
+
+  text-align: center;
+  width: 100%;
+  height:305px;
+  background-color:#000000;
+  border-style:solid;
+  border-color:#FFFFFF;
+}
+}
 </style>
 </head>
 
@@ -238,11 +272,15 @@ html, body{
               
                 <div class="list-group derp" id="sidebar">
                   </a>
-                  <a href="Home" class="list-group-item"><h3>Home</h3>
+
+                  <a href="Home" class="list-group-item b"><font color = "FFB700"><br><h1><br>Home</h1>
+                  </font>
                   </a>
-                  <a href="Angle" class="list-group-item"><h3>Head Angle</h3>
+                  <a href="Angle" class="list-group-item c"><font color = "FFB700"><br><br><h1><br>Head Angle</h1>
+                  </font>
                   </a>
-                  <a href="Disruptions" class="list-group-item"><h3>Disruptions</h3>
+                  <a href="Disruptions" class="list-group-item d"><font color = "FFB700"><br><h1><br>Disruptions</h1>
+                  </font>
                   </a>
                 </div>
           </div> 
