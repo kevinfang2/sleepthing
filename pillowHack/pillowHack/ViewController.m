@@ -33,7 +33,7 @@
 }
 int a;
 - (IBAction)start:(id)sender {
-//    [self gyroscope];
+    [self gyroscope];
     start.hidden = YES;
     end.hidden = NO;
     
@@ -131,6 +131,7 @@ int a;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    
     // Dispose of any resources that can be recreated.
 }
 
