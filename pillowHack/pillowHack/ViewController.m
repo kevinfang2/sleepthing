@@ -47,7 +47,7 @@
     __weak IBOutlet UIButton *start;
     __weak IBOutlet UIButton *end;
     __weak IBOutlet UIButton *camera;
-
+    HKHealthStore *healthStore;
 }
 
 int a=1;
@@ -244,11 +244,12 @@ int occurances=0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    healthStore = [[HKHealthStore alloc] init];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"healthkitenabled"] == NULL) {
         [self enableHealthkit];
     }
     else {
-        
+        [self getUsersSleep];
     }
 }
     
@@ -341,7 +342,6 @@ BOOL isDarkImage(UIImage* inputImage){
     
 }
 -(void)enableHealthkit {
-HKHealthStore *healthStore = [[HKHealthStore alloc] init];
     NSSet *shareObjectTypes = [NSSet setWithObjects:
                                [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
                                nil];
@@ -358,8 +358,64 @@ NSSet *readObjectTypes  = [NSSet setWithObjects:
                                    }];
 }
 
--(void)getSleepData {
+- (void)hkQueryExecute:(void (^)(double, NSError *))completion {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     
+    NSDate *now = [NSDate date];
+    
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    
+    NSDate *startDate = [calendar dateFromComponents:components];
+    
+    NSDate *endDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+    
+    HKSampleType *sampleType = [HKSampleType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
+    
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:sampleType predicate:predicate limit:0 sortDescriptors:nil resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error) {
+        if (!results) {
+            NSLog(@"An error occured fetching the user's sleep duration. In your app, try to handle this gracefully. The error was: %@.", error);
+            completion(0, error);
+            abort();
+        }
+        
+        double minutesSleepAggr = 0;
+        for (HKCategorySample *sample in results) {
+            
+            NSTimeInterval distanceBetweenDates = [sample.endDate timeIntervalSinceDate:sample.startDate];
+            double minutesInAnHour = 60;
+            double minutesBetweenDates = distanceBetweenDates / minutesInAnHour;
+            
+            minutesSleepAggr += minutesBetweenDates;
+        }
+        completion(minutesSleepAggr, error);
+    }];
+    
+    [healthStore executeQuery:query];
 }
 
+- (void)getUsersSleep {
+    [self hkQueryExecute: ^(double minutes, NSError *error) {
+        if (minutes == 0) {
+            NSLog(@"Either an error occured fetching the user's sleep information or none has been stored yet.");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"not avaiable yet sorry kuvin.");
+            });
+        }
+        else {
+            
+            int hours = (int)minutes / 60;
+            int minutesNew = (int)minutes - (hours*60);
+            NSLog(@"hours slept: %ld:%ld", (long)hours, (long)minutesNew);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+              NSString *theNumberOfHours = [NSString stringWithFormat:@"%d:%d", hours, minutesNew] ;
+                NSLog(@"hours and minutes of sleep i s%@", theNumberOfHours);
+            });
+        }
+        
+        
+    }];
+}
 @end
