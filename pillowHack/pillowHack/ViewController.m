@@ -26,7 +26,10 @@
 
 @end
 
-@implementation ViewController
+@implementation ViewController {
+    
+    __weak IBOutlet UIButton *start;
+}
 
 - (IBAction)start:(id)sender {
     yTotal = 0;
