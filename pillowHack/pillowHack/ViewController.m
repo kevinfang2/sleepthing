@@ -35,11 +35,13 @@ int a;
 - (IBAction)start:(id)sender {
 //    [self gyroscope];
     start.hidden = YES;
+    end.hidden = NO;
     
 }
 - (IBAction)end:(id)sender {
     NSLog(@"asdf");
     start.hidden= NO;
+    end.hidden = YES;
 }
 
 
@@ -120,6 +122,7 @@ int a;
 
 
 - (void)viewDidLoad {
+    end.hidden = YES;
 //    [myRootRef setValue:0];
     
 
