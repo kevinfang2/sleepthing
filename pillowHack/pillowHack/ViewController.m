@@ -244,6 +244,12 @@ int occurances=0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"healthkitenabled"] == NULL) {
+        [self enableHealthkit];
+    }
+    else {
+        
+    }
 }
     
 
@@ -334,6 +340,26 @@ BOOL isDarkImage(UIImage* inputImage){
     return isDark;
     
 }
+-(void)enableHealthkit {
+HKHealthStore *healthStore = [[HKHealthStore alloc] init];
+    NSSet *shareObjectTypes = [NSSet setWithObjects:
+                               [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
+                               nil];
+    
+NSSet *readObjectTypes  = [NSSet setWithObjects:
+                           [HKObjectType characteristicTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis], nil];
+[healthStore requestAuthorizationToShareTypes:shareObjectTypes
+                                    readTypes:readObjectTypes
+                                   completion:^(BOOL success, NSError *error) {
+                                       if(success == YES)
+                                       {
+                                           [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:@"healthkitenabled"];
+                                       }
+                                   }];
+}
 
+-(void)getSleepData {
+    
+}
 
 @end

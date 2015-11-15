@@ -16,7 +16,6 @@
 		0A3E59AE1BF8143300FF1991 /* pillowHackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3E59AD1BF8143300FF1991 /* pillowHackTests.m */; };
 		0A3E59B91BF8143300FF1991 /* pillowHackUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3E59B81BF8143300FF1991 /* pillowHackUITests.m */; };
 		0A9E724B1BF87B5500A527D3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9E724A1BF87B5500A527D3 /* HealthKit.framework */; };
-		0A9E72511BF87BE100A527D3 /* GSHealthKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E72501BF87BE100A527D3 /* GSHealthKitManager.m */; };
 		0A9E72531BF88CC000A527D3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9E72521BF88CC000A527D3 /* CoreFoundation.framework */; };
 		0A9E72551BF8B3EA00A527D3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9E72541BF8B3EA00A527D3 /* AVFoundation.framework */; };
 		3A89891D556473EE827FB80F /* libPods-pillowHack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8308C7C1DD2C858372D6DBE4 /* libPods-pillowHack.a */; };
@@ -58,8 +57,6 @@
 		0A3E59BA1BF8143300FF1991 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A9E72491BF87B5500A527D3 /* pillowHack.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = pillowHack.entitlements; sourceTree = "<group>"; };
 		0A9E724A1BF87B5500A527D3 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		0A9E724F1BF87BE100A527D3 /* GSHealthKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSHealthKitManager.h; sourceTree = "<group>"; };
-		0A9E72501BF87BE100A527D3 /* GSHealthKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSHealthKitManager.m; sourceTree = "<group>"; };
 		0A9E72521BF88CC000A527D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0A9E72541BF8B3EA00A527D3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3F0A2A095F717C68AB06399E /* Pods-pillowHack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pillowHack.release.xcconfig"; path = "Pods/Target Support Files/Pods-pillowHack/Pods-pillowHack.release.xcconfig"; sourceTree = "<group>"; };
@@ -124,8 +121,6 @@
 		0A3E59921BF8143300FF1991 /* pillowHack */ = {
 			isa = PBXGroup;
 			children = (
-				0A9E724F1BF87BE100A527D3 /* GSHealthKitManager.h */,
-				0A9E72501BF87BE100A527D3 /* GSHealthKitManager.m */,
 				0A9E72491BF87B5500A527D3 /* pillowHack.entitlements */,
 				0A3E59961BF8143300FF1991 /* AppDelegate.h */,
 				0A3E59971BF8143300FF1991 /* AppDelegate.m */,
@@ -372,7 +367,6 @@
 			files = (
 				0A3E599B1BF8143300FF1991 /* ViewController.m in Sources */,
 				0A3E59981BF8143300FF1991 /* AppDelegate.m in Sources */,
-				0A9E72511BF87BE100A527D3 /* GSHealthKitManager.m in Sources */,
 				0A3E59951BF8143300FF1991 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
