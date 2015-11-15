@@ -97,16 +97,18 @@ int occurances=0;
                  {
                      float degs = RADIANS_TO_DEGREES(gyroData.rotationRate.y);
                      degs = degs - 0.4;
-                     if(degs > 50.0 || degs < -50.0)
-                     {
-                         yTotal = degs;
-//                         NSNumber *x = [NSNumber numberWithInt:3];
-                         int x = 1;
-                         occurances = x + occurances;
-                         NSLog(@"%d",occurances);
+                     int x;
+                     for(x=0;x>=0;x++){
+                         yTotal = degs + yTotal;
+                         if(degs > 50.0 || degs < -50.0){
+//                           NSNumber *x = [NSNumber numberWithInt:3];
+                             int x = 1;
+                             occurances = x + occurances;
+                             NSLog(@"%d",occurances);
+                         }
                      }
-                     
-                     NSString *y = [[NSString alloc] initWithFormat:@"%.02f",yTotal];
+                     float average = yTotal/x;
+                     NSString *y = [[NSString alloc] initWithFormat:@"%.02f",average];
                      angle = yTotal;
                      yLabel.text = y;
                      yLabelChange.text = [[NSString alloc] initWithFormat:@"%.02f",degs];
@@ -114,7 +116,8 @@ int occurances=0;
                  }];
             }
         }
-        Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://hackchair.firebaseio.com"] childByAppendingPath:@"disturbances"];
+
+        Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://hackchair.firebaseio.com"] childByAppendingPath:@"disturbances" @"headangle"];
         // Write data to Firebase
         NSNumber *disturbances = [NSNumber numberWithInt:occurances];
         [myRootRef setValue: disturbances];

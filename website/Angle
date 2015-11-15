@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
     <link rel="icon" href="fav.ico">
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 
     <style>
 
@@ -254,6 +255,13 @@ position:absolute;
 
 <body><font color="white">
 
+<script>
+var myDataRef = new Firebase('https://pillowhack.firebaseio.com/');
+myDataRef.set('disturbances');
+$('#disturbances').val('');
+
+</script>
+
 <div id="main">
   <div id="header" align="center">
     <h2 id="title"></h2>
@@ -309,12 +317,17 @@ position:absolute;
 </nav>
 
 
+
+
+
+
  <div id="wrapper">
          <div class="chart">
             <h3>Timeline of Head Angle</h3>
             <table id="data-table" border="1" cellpadding="10" cellspacing="0">
                <thead>
                   <tr>
+
                      <td>&nbsp;</td>
                      <th class="col">10:00 PM</th>
                      <th class="col">12:00 AM</th>
@@ -334,8 +347,8 @@ position:absolute;
                   </tr>
                   <tr>
                      <th class="row">Angle (Degrees)</th>
-                     <td>160</td>
-                     <td>170</td>
+                     <td><input type='int' id='disturbances'></td>
+                     <td>70</td>
                      <td>165</td>
                      <td>175</td>
                      <td>165</td>
