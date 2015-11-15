@@ -12,6 +12,8 @@
 #import <healthkit/healthkit.h>
 #import "GSHealthKitManager.h"
 #import <CoreFoundation/CoreFoundation.h>
+#import <ImageIO/CGImageProperties.h>
+
 #define _width self.view.frame.size.width
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
 
@@ -22,6 +24,8 @@
     UIButton* capture;
     UILabel* label;
     UILabel* counter;
+    AVCaptureStillImageOutput* stillImageOutput;
+    
     int count;
     float angle;
     __block float yTotal;
@@ -37,8 +41,8 @@
     __weak IBOutlet UIButton *start;
     __weak IBOutlet UIButton *end;
     __weak IBOutlet UIButton *camera;
-}
 
+}
 
 int a=1;
 - (IBAction)start:(id)sender {
@@ -52,17 +56,18 @@ int a=1;
     
 }
 
-
-
 - (IBAction)end:(id)sender {
     a=2;
     start.hidden= NO;
     end.hidden = YES;
+    
+    
 }
 
 - (IBAction)camera:(id)sender {
     [self camera];
 }
+
 
 
 
@@ -160,16 +165,18 @@ int occurances=0;
 
 -(void) tick2:(NSTimer*)timer
 {
-    count = count - 1;
-    label.text = [NSString stringWithFormat:@"%d",count];
-    if(count == 1)
-    {
-        count = 4;
-//        [self capture];
-        NSLog(@"herp1");
-
+    
+        count = count - 1;
+        label.text = [NSString stringWithFormat:@"%d",count];
+        if(count == 0)
+        {
+            count = 4;
+            [self capture];
+            NSLog(@"herp1");
+            
+        }
     }
-}
+
 
 - (AVCaptureDevice *)frontCamera {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -182,19 +189,14 @@ int occurances=0;
 }
 
 -(void) camera{
-    UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(10, 0, 320, 50)];
-    [self.view addSubview:navbar];
-    navbar.backgroundColor = [UIColor blueColor];
-    NSLog(@"derp");
-    UIBarButtonItem *btnHome = [[UIBarButtonItem alloc]
-                                  initWithTitle:@"Done"
-                                  style:UIBarButtonItemStyleBordered
-                                  target:self
-                                  action:@selector(viewDidLoad)];
-    NSLog(@"herp");
-    self.navigationItem.leftBarButtonItem = btnHome;
-    
-    
+//    navbar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, _width, 66)];
+//    navbar.backgroundColor = [UIColor redColor];
+//
+//
+//    
+//    
+//    [[self view] addSubview:navbar];
+//
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPresetHigh;
     AVCaptureDevice *device = [self frontCamera];
@@ -203,7 +205,7 @@ int occurances=0;
     [session addInput:input];
     AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     newCaptureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 0, _width, self.view.frame.size.height);
+    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 66, _width, self.view.frame.size.height-66);
     //    newCaptureVideoPreviewLayer.la
     [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
     [session startRunning];
@@ -211,7 +213,6 @@ int occurances=0;
 //    [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
 //            capturedView.image = image;
         [self.view addSubview:capturedView];
-    
     
     [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick2:) userInfo:nil repeats:YES];
     count = 3;
@@ -221,8 +222,7 @@ int occurances=0;
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont boldSystemFontOfSize:60];
     [self.view addSubview:label];
-    
-//    [self isDarkImage];
+
 
 }
 
@@ -232,6 +232,30 @@ int occurances=0;
     
 
 
+-(void) capture
+{
+    AVCaptureConnection *videoConnection = nil;
+    for (AVCaptureConnection *connection in stillImageOutput.connections) {
+        for (AVCaptureInputPort *port in [connection inputPorts]) {
+            if ([[port mediaType] isEqual:AVMediaTypeVideo] ) {
+                videoConnection = connection;
+                break;
+            }
+        }
+        if (videoConnection) { break; }
+    }
+    [stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:
+     ^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
+         CFDictionaryRef exifAttachments =
+         CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+         NSLog(@"asdf");
+         if (exifAttachments) {
+             
+         }
+         // Continue as appropriate.
+     }];
+
+}
 
     //    [myRootRef setValue:0];
 //    [self.view addSubview:sleep];

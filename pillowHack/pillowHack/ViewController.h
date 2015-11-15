@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreFoundation/CoreFoundation.h>
-#import <Healthkit/HealthKit.h>
+
 
 @interface ViewController : UIViewController
 
-+ (CFTimeInterval*)buttonPressedStartTime;
 
 @property (strong, nonatomic) IBOutlet UIView *objectView;
 

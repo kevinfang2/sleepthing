@@ -38,18 +38,36 @@
                                     <action selector="camera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="V6O-HB-QOe"/>
                                 </connections>
                             </button>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZH9-eV-gc7">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="1eK-1I-5Oi"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="LUl-4r-PbG"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem title="Done" id="Ioz-lh-WCN">
+                                        <connections>
+                                            <action selector="cancelCamera:" destination="BYZ-38-t0r" id="GcY-XA-qnh"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="pwt-Wk-phH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8Ty-C6-zUX"/>
+                            <constraint firstItem="ZH9-eV-gc7" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="EeJ-Vw-lGK"/>
                             <constraint firstItem="cLi-KX-0u0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mtd-VZ-hGt"/>
                             <constraint firstItem="4aB-X5-xbY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d9w-96-i0Z"/>
+                            <constraint firstItem="ZH9-eV-gc7" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="lKa-SE-pAz"/>
+                            <constraint firstAttribute="trailing" secondItem="ZH9-eV-gc7" secondAttribute="trailing" id="wXO-FE-W8A"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="camera" destination="4aB-X5-xbY" id="bkx-kS-hxB"/>
                         <outlet property="end" destination="cLi-KX-0u0" id="CGR-IE-rEq"/>
                         <outlet property="start" destination="pwt-Wk-phH" id="DPC-W1-hKC"/>
+                        <outlet property="toolBar" destination="ZH9-eV-gc7" id="Frt-YY-Pu9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

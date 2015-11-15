@@ -18,6 +18,7 @@
 		0A9E724B1BF87B5500A527D3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9E724A1BF87B5500A527D3 /* HealthKit.framework */; };
 		0A9E72511BF87BE100A527D3 /* GSHealthKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E72501BF87BE100A527D3 /* GSHealthKitManager.m */; };
 		0A9E72531BF88CC000A527D3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9E72521BF88CC000A527D3 /* CoreFoundation.framework */; };
+		0A9E72551BF8B3EA00A527D3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9E72541BF8B3EA00A527D3 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		0A9E724F1BF87BE100A527D3 /* GSHealthKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSHealthKitManager.h; sourceTree = "<group>"; };
 		0A9E72501BF87BE100A527D3 /* GSHealthKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSHealthKitManager.m; sourceTree = "<group>"; };
 		0A9E72521BF88CC000A527D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		0A9E72541BF8B3EA00A527D3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A9E72551BF8B3EA00A527D3 /* AVFoundation.framework in Frameworks */,
 				0A9E72531BF88CC000A527D3 /* CoreFoundation.framework in Frameworks */,
 				0A9E724B1BF87B5500A527D3 /* HealthKit.framework in Frameworks */,
 			);
@@ -91,6 +94,7 @@
 		0A3E59871BF8143200FF1991 = {
 			isa = PBXGroup;
 			children = (
+				0A9E72541BF8B3EA00A527D3 /* AVFoundation.framework */,
 				0A9E72521BF88CC000A527D3 /* CoreFoundation.framework */,
 				0A9E724A1BF87B5500A527D3 /* HealthKit.framework */,
 				0A3E59921BF8143300FF1991 /* pillowHack */,
