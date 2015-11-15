@@ -373,8 +373,10 @@ BOOL isDarkImage(UIImage* inputImage){
     
 NSSet *readObjectTypes  = [NSSet setWithObjects:
                            [HKObjectType characteristicTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis], nil];
+    
+    NSSet *readObj = [NSSet setWithObject:[HKObjectType characteristicTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis]];
 [healthStore requestAuthorizationToShareTypes:shareObjectTypes
-                                    readTypes:readObjectTypes
+                                    readTypes:readObj
                                    completion:^(BOOL success, NSError *error) {
                                        if(success == YES)
                                        {
