@@ -368,7 +368,7 @@ BOOL isDarkImage(UIImage* inputImage){
 }
 -(void)enableHealthkit {
     NSSet *shareObjectTypes = [NSSet setWithObjects:
-                               [HKObjectType quantityTypeForIdentifier:   HKCategoryValueSleepAnalysisAsleep],
+                               [HKObjectType quantityTypeForIdentifier:   HKQueryOptionNone],
                                nil];
     
 NSSet *readObjectTypes  = [NSSet setWithObjects:
