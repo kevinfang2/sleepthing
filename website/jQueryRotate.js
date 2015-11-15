@@ -2,6 +2,7 @@
 /* 
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  * 
+ CREDIT:
  * Made by Wilq32, wilq32@gmail.com, Wroclaw, Poland, 01.2009
  * Website: http://code.google.com/p/jqueryrotate/ 
  */
