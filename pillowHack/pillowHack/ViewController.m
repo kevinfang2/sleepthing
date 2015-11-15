@@ -36,23 +36,15 @@
     
     __weak IBOutlet UIButton *start;
     __weak IBOutlet UIButton *end;
+    __weak IBOutlet UIButton *camera;
 }
 
 
-- (AVCaptureDevice *)frontCamera {
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionFront) {
-            return device;
-        }
-    }
-    return nil;
-}
 int a=1;
 - (IBAction)start:(id)sender {
+    [self frontCamera];
     [self gyroscope];
     [self timer];
-    [self frontCamera];
     a=1;
     start.hidden = YES;
     end.hidden = NO;
@@ -64,26 +56,15 @@ int a=1;
 
 - (IBAction)end:(id)sender {
     a=2;
-    NSLog(@"asdf");
     start.hidden= NO;
     end.hidden = YES;
 }
-//
-//- (void)sleep{
-//    HKCategoryType *categoryType =
-//    [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis];
-//    
-//    NSDate* now= [NSDate date];
-//    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-//    [outputFormatter setDateFormat:@"HH:mm:ss"];
-//    NSString *newDateString = [outputFormatter stringFromDate:now];
-//    NSLog(@"newDateString %@", newDateString);
-//
-//    [HKCategorySample categorySampleWithType:categoryType
-//                                       value:HKCategoryValueSleepAnalysisAsleep
-//                                   startDate:now
-//                                     endDate:now];
-//}
+
+- (IBAction)camera:(id)sender {
+    [self camera];
+}
+
+
 
 int occurances=0;
 
@@ -91,7 +72,6 @@ int occurances=0;
     yTotal = 0;
     if(a == 1){
         [super viewDidLoad];
-        NSLog(@"asdf");
         UILabel* yLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 50)];
         [self.view addSubview:yLabel];
         yLabel.textAlignment = NSTextAlignmentCenter;
@@ -153,6 +133,8 @@ int occurances=0;
     
 }
 
+
+
 - (void)timer{
     if(a==1){
         [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick:) userInfo:nil repeats:YES];
@@ -176,19 +158,84 @@ int occurances=0;
 //    }
 //    return nil;
 
+-(void) tick2:(NSTimer*)timer
+{
+    count = count - 1;
+    [counter removeFromSuperview];
+    
+    //     NSLog(@"derpasdf %d",count);
+    counter = [[UILabel alloc] initWithFrame:CGRectMake(30, 350, _width, 30)];
+    counter.text = [NSString stringWithFormat:@"%d",count];
+    [[self view] addSubview:counter];
+}
 
- 
 
+- (AVCaptureDevice *)frontCamera {
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionFront) {
+            return device;
+        }
+    }
+    return nil;
+}
 
+-(void) camera{
+    UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+    //do something like background color, title, etc you self
+    [self.view addSubview:navbar];
+    UIBarButtonItem *btnCancel = [[UIBarButtonItem alloc]
+                                  initWithTitle:@"Cancel"
+                                  style:UIBarButtonItemStyleBordered
+                                  target:self
+                                  action:@selector(viewDidLoad)];
+    self.navigationItem.leftBarButtonItem = btnCancel;
+    
+    
+    
+    AVCaptureSession *session = [[AVCaptureSession alloc] init];
+    session.sessionPreset = AVCaptureSessionPresetHigh;
+    AVCaptureDevice *device = [self frontCamera];
+    NSError *error = nil;
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
+    [session addInput:input];
+    AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
+    newCaptureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    newCaptureVideoPreviewLayer.frame = CGRectMake(0, 0, _width, self.view.frame.size.height);
+    //    newCaptureVideoPreviewLayer.la
+    [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
+    [session startRunning];
+    
+    //    capturedView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
+    //    //    capturedView.image = image;
+    //    [self.view addSubview:capturedView];
+    
+    
+    
+    count = 3;
+    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(tick2:) userInfo:nil repeats:YES];
+
+    label = [[UILabel alloc] initWithFrame:CGRectMake(0, 500, _width, 100)];
+    label.text = @"3";
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont boldSystemFontOfSize:60];
+    [self.view addSubview:label];
+
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+    
+
+
+
     //    [myRootRef setValue:0];
 //    [self.view addSubview:sleep];
 
     
     // Do any additional setup after loading the view, typically from a nib.
-}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

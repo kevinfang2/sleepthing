@@ -25,10 +25,17 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cLi-KX-0u0">
-                                <rect key="frame" x="285" y="264" width="30" height="30"/>
+                                <rect key="frame" x="285" y="231" width="30" height="30"/>
                                 <state key="normal" title="End"/>
                                 <connections>
                                     <action selector="end:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SKU-oH-568"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4aB-X5-xbY">
+                                <rect key="frame" x="273" y="263" width="54" height="30"/>
+                                <state key="normal" title="Camera"/>
+                                <connections>
+                                    <action selector="camera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="V6O-HB-QOe"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -36,9 +43,11 @@
                         <constraints>
                             <constraint firstItem="pwt-Wk-phH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8Ty-C6-zUX"/>
                             <constraint firstItem="cLi-KX-0u0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mtd-VZ-hGt"/>
+                            <constraint firstItem="4aB-X5-xbY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d9w-96-i0Z"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="camera" destination="4aB-X5-xbY" id="bkx-kS-hxB"/>
                         <outlet property="end" destination="cLi-KX-0u0" id="CGR-IE-rEq"/>
                         <outlet property="start" destination="pwt-Wk-phH" id="DPC-W1-hKC"/>
                     </connections>
