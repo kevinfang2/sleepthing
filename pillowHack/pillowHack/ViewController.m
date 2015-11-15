@@ -79,7 +79,26 @@ int a=1;
     
     [[myRootRef childByAppendingPath:@"timelight"] setValue: [NSNumber numberWithFloat:totalangle/lightticks]];
     
+}
+
+
+
+-(void)buttonAction
+{
+    a=2;
+    start.hidden= NO;
+    end.hidden = YES;
     
+    Firebase *myRootRef = [[Firebase alloc] initWithUrl:@"https://pillowhack.firebaseio.com"];
+    // Write data to Firebase
+    NSNumber *disturbances = [NSNumber numberWithInt:occurances];
+    [[myRootRef childByAppendingPath:@"disturbances"] setValue: disturbances];
+    
+    [[myRootRef childByAppendingPath:@"timeslept"] setValue: [NSNumber numberWithInt:count]];
+    
+    [[myRootRef childByAppendingPath:@"averageangle"] setValue: [NSNumber numberWithFloat:totalangle/anglescounted]];
+    
+    [[myRootRef childByAppendingPath:@"timelight"] setValue: [NSNumber numberWithFloat:totalangle/lightticks]];
 }
 
 - (IBAction)camera:(id)sender {
@@ -228,6 +247,12 @@ int occurances=0;
     //    newCaptureVideoPreviewLayer.la
     [self.view.layer addSublayer:newCaptureVideoPreviewLayer];
     [session startRunning];
+    
+    UIButton* b = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    [self.view addSubview:b];
+    [b setTitle:@"end" forState:UIControlStateNormal];
+    [b addTarget:self action:@selector(buttonAction) forControlEvents:UIControlEventTouchUpInside];
+
     
     //    capturedView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dWidth, dHeight)];
     //    //    capturedView.image = image;
