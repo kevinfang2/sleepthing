@@ -13,6 +13,7 @@
 #import "GSHealthKitManager.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <ImageIO/CGImageProperties.h>
+#import <Firebase/Firebase.h>
 
 #define _width self.view.frame.size.width
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
@@ -113,6 +114,10 @@ int occurances=0;
                  }];
             }
         }
+        Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://hackchair.firebaseio.com"] childByAppendingPath:@"disturbances"];
+        // Write data to Firebase
+        NSNumber *disturbances = [NSNumber numberWithInt:occurances];
+        [myRootRef setValue: disturbances];
 
     }
     else{
@@ -234,35 +239,54 @@ int occurances=0;
 
 -(void) capture
 {
+    
+
+    [[Firebase alloc] initWithUrl:@"https://pillowhack.firebaseio.com/"];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:0 forKey:@"blinks"];
+    
     AVCaptureConnection *videoConnection = nil;
-    for (AVCaptureConnection *connection in stillImageOutput.connections) {
-        for (AVCaptureInputPort *port in [connection inputPorts]) {
-            if ([[port mediaType] isEqual:AVMediaTypeVideo] ) {
+    for (AVCaptureConnection *connection in stillImageOutput.connections)
+    {
+        for (AVCaptureInputPort *port in [connection inputPorts])
+        {
+            if ([[port mediaType] isEqual:AVMediaTypeVideo] )
+            {
                 videoConnection = connection;
                 break;
             }
         }
-        if (videoConnection) { break; }
+        if (videoConnection)
+        {
+            break;
+        }
     }
-    [stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:
-     ^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
-         CFDictionaryRef exifAttachments =
-         CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
-         NSLog(@"asdf");
-         if (exifAttachments) {
-             
-         }
-         // Continue as appropriate.
-     }];
-
-}
-
-    //    [myRootRef setValue:0];
-//    [self.view addSubview:sleep];
-
     
-    // Do any additional setup after loading the view, typically from a nib.
-
+    [stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error)
+     {
+         CFDictionaryRef exifAttachments = CMGetAttachment( imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+         if (exifAttachments)
+         {
+         }
+         else
+         {
+             NSLog(@"no attachments");
+         }
+         NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
+         UIImage *image = [[UIImage alloc] initWithData:imageData];
+         Firebase *myRootRef = [[[Firebase alloc] initWithUrl:@"https://pillowhack.firebaseio.com/"]childByAppendingPath:@"light"];
+         
+         if(isDarkImage(image))
+         {
+             [myRootRef setValue:[NSNumber numberWithBool:true]];
+         }
+         else
+         {
+             [myRootRef setValue:[NSNumber numberWithBool:false]];
+         }
+         
+     }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
