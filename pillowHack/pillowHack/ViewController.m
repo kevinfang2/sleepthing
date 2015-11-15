@@ -10,6 +10,8 @@
 #import <CoreMotion/CoreMotion.h>
 #import <AVFoundation/AVFoundation.h>
 #import <healthkit/healthkit.h>
+#import "GSHealthKitManager.h"
+#import <CoreFoundation/CoreFoundation.h>
 #define _width self.view.frame.size.width
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
 
@@ -23,7 +25,10 @@
     int count;
     float angle;
     __block float yTotal;
+    GSHealthKitManager *sleep;
+    
 }
+
 
 @end
 
@@ -33,34 +38,53 @@
     __weak IBOutlet UIButton *end;
 }
 
+
 - (IBAction)start:(id)sender {
     [self gyroscope];
     [self timer];
+    
+    buttonPressedStartTime = CFAbsoluteTimeGetCurrent();
 
+    NSDate *startNow = [NSDate date];
     start.hidden = YES;
     end.hidden = NO;
-
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:startNow];
+    NSLog(@"newDateString %@", newDateString);
+    
 }
+
+
 
 - (IBAction)end:(id)sender {
     NSLog(@"asdf");
     start.hidden= NO;
     end.hidden = YES;
+
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    NSLog(@"newDateString %@", newDateString);
 }
 
+- (void)sleep{
+    HKCategoryType *categoryType =
+    [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis];
+    
+    NSDate* now= [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    NSLog(@"newDateString %@", newDateString);
 
-//- (void)timer{
-//    NSTimer *timer = [[timer alloc] init];
-//    
-//    [timer startTimer];
-//    // Do some work
-//    [timer stopTimer];
-//    
-//    NSLog(@"Total time was: %lf milliseconds", [timer timeElapsedInMilliseconds]);
-//    NSLog(@"Total time was: %lf seconds", [timer timeElapsedInSeconds]);
-//    NSLog(@"Total time was: %lf minutes", [timer timeElapsedInMinutes]);
-//    
-//}
+    [HKCategorySample categorySampleWithType:categoryType
+                                       value:HKCategoryValueSleepAnalysisAsleep
+                                   startDate:now
+                                     endDate:now];
+}
+
 int occurances=0;
 
 - (void)gyroscope{
@@ -94,9 +118,8 @@ int occurances=0;
                          int x = 1;
                          occurances = x + occurances;
                          NSLog(@"%d",occurances);
-                         
-                         
                      }
+                     
                      NSString *y = [[NSString alloc] initWithFormat:@"%.02f",yTotal];
                      angle = yTotal;
                      yLabel.text = y;
@@ -104,7 +127,6 @@ int occurances=0;
                      //                 [myRootRef setValue:[NSNumber numberWithFloat:yTotal]];
                  }];
             }
-            //        [self sleeptimer];
         }
 
     }
@@ -167,10 +189,12 @@ int occurances=0;
 
 
 - (void)viewDidLoad {
-    end.hidden = YES;
-//    [myRootRef setValue:0];
+    [super viewDidLoad];
+    //    [myRootRef setValue:0];
     
+    [self.view addSubview:sleep];
 
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
